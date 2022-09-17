@@ -1,0 +1,16 @@
+version: "3"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017
+    depends_on:
+      - mongodb
+  mongodb:
+    image: "mongo:3.6.17"
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./persistence:/data/db
