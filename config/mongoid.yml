@@ -1,0 +1,9 @@
+development:
+  clients:
+    default:
+      connect: :direct
+      database: parking_abc
+      hosts:
+        - mongodb:27017
+      options:
+        server_selection_timeout: 1
