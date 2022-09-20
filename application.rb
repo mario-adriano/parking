@@ -10,7 +10,7 @@ require_relative 'app/controllers/parking_controller'
 
 require_relative 'app/models/parking'
 
-Mongoid.load!(File.join(File.dirname(__FILE__), 'config', 'mongoid.yml'))
+Mongoid.load!('config/mongoid.yml', ENV['RACK_ENV'])
 
 # rubocop:disable Style/Documentation
 class Application < Sinatra::Base

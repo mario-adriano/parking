@@ -30,22 +30,20 @@ class ParkingController < ApplicationController
     if parking_lots.any?
       parking = parking_lots.last
 
-      if parking
-        if parking.paid
-          parking.left = true
-          parking.payment_data = Time.now
-          parking.save
+      if parking.paid
+        parking.left = true
+        parking.payment_data = Time.now
+        parking.save
 
-          status 200
-          ParkingSerializer.new(parking).to_json
-        else
-          status 400
-          response_json('Payment not made')
-        end
+        status 200
+        ParkingSerializer.new(parking).to_json
       else
-        status 404
-        response_json('Not found')
+        status 400
+        response_json('Payment not made')
       end
+    else
+      status 404
+      response_json('Not found')
     end
   end
 
@@ -54,27 +52,31 @@ class ParkingController < ApplicationController
     if parking_lots.any?
       parking = parking_lots.last
 
-      if parking
-        if parking.paid
-          status 400
-          response_json('Payment already made')
-        else
-          parking.paid = true
-          parking.save
-
-          status 200
-          ParkingSerializer.new(parking).to_json
-        end
+      if parking.paid
+        status 400
+        response_json('Payment already made')
       else
-        status 404
-        response_json('Not found')
+        parking.paid = true
+        parking.save
+
+        status 200
+        ParkingSerializer.new(parking).to_json
       end
+    else
+      status 404
+      response_json('Not found')
     end
   end
 
   get '/parking/:plate' do |plate|
     @parking = Parking.where(plate: plate)
-    @parking.map { |parking| ParkingSerializer.new(parking) }.to_json
+    if @parking.any?
+      status 200
+      @parking.map { |parking| ParkingSerializer.new(parking) }.to_json
+    else
+      status 404
+      response_json('Not found')
+    end
   end
 
   private
