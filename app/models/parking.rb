@@ -9,13 +9,13 @@ class Parking
   validates_uniqueness_of :plate, conditions: -> { where(left: false) }
 
   field :plate, type: String
-  field :payment_data, type: Time
+  field :exit_time, type: Time
   field :paid, type: Boolean, default: false
   field :left, type: Boolean, default: false
 
   def out!
     @left = true
-    @payment_data = Time.now
+    @exit_time = Time.now
     save
   end
 
