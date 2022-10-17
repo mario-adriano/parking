@@ -3,7 +3,6 @@
 require_relative 'application_controller'
 require_relative '../serializers/parking_serializer'
 
-# rubocop:disable Style/Documentation
 class ParkingController < ApplicationController
   post '/parking' do
     parking = Parking.new(json_params)
