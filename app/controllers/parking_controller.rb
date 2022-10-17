@@ -26,14 +26,12 @@ class ParkingController < ApplicationController
   end
 
   put '/parking/:plate/out' do |plate|
-    parking_lots = Parking.where(plate: plate)
-    if parking_lots.any?
-      parking = parking_lots.last
+    parking = Parking.where(plate: plate).last
+
+    if parking.present?
 
       if parking.paid
-        parking.left = true
-        parking.payment_data = Time.now
-        parking.save
+        parking.out!
 
         status 200
         ParkingSerializer.new(parking).to_json
@@ -48,16 +46,15 @@ class ParkingController < ApplicationController
   end
 
   put '/parking/:plate/pay' do |plate|
-    parking_lots = Parking.where(plate: plate)
-    if parking_lots.any?
-      parking = parking_lots.last
+    parking = Parking.where(plate: plate).last
+
+    if parking.present?
 
       if parking.paid
         status 400
         response_json('Payment already made')
       else
-        parking.paid = true
-        parking.save
+        parking.pay!
 
         status 200
         ParkingSerializer.new(parking).to_json
