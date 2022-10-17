@@ -12,4 +12,15 @@ class Parking
   field :payment_data, type: Time
   field :paid, type: Boolean, default: false
   field :left, type: Boolean, default: false
+
+  def out!
+    @left = true
+    @payment_data = Time.now
+    save
+  end
+
+  def pay!
+    @paid = true
+    save
+  end
 end
